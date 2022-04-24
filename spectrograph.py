@@ -16,12 +16,14 @@ def createSpectrogram(filename=''):
         plt.xlabel('Time')
         plt.ylabel('Frequency')
 
-        plt.show()
-        imgFilename = filename[:len(filename)-3] + 'png'
+        #plt.show()
+        imgFilename = 'imgFiles/' + filename[9:len(filename)-3] + 'png'
         print(imgFilename)
         fig.savefig(imgFilename)
 
 directory = 'wavFiles'
+#os.remove('imgFiles')
+#os.mkdir('imgFiles')
 for file in os.listdir(directory):
     f = os.path.join(directory, file)
     if os.path.isfile(f):
