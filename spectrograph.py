@@ -21,28 +21,28 @@ import random
 # https://www.deeplearningwizard.com/deep_learning/practical_pytorch/pytorch_feedforward_neuralnetwork/
 # https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5
 
-def createSpectrogram(filename=''):
+def create_spectrogram(filename=''):
     if filename != '':
-        samplingFrequency, signalData = wavfile.read(filename)
+        sampling_frequency, signal_data = wavfile.read(filename)
 
         fig = plt.figure()
         plt.title(filename[39:])
 
-        plt.specgram(signalData, Fs=samplingFrequency)
+        plt.specgram(signal_data, Fs=sampling_frequency)
         plt.xlabel('Time')
         plt.ylabel('Frequency')
 
         # plt.show()
-        imgFilename = 'img_files/' + filename[18:len(filename)-3] + 'png'
-        print(imgFilename)
-        fig.savefig(imgFilename)
+        img_filename = 'img_files/' + filename[18:len(filename)-3] + 'png'
+        print(img_filename)
+        fig.savefig(img_filename)
 
 def spectrograph_loop():
     directory = 'prepped_wav_files'
     for file in os.listdir(directory):
         f = os.path.join(directory, file)
         if os.path.isfile(f):
-            createSpectrogram(f)
+            create_spectrogram(f)
 
 def trim_pad_audio():
     directory = 'wav_files'
