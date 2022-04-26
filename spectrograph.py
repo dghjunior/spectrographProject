@@ -4,9 +4,16 @@ import matplotlib.pyplot as plt
 import os
 from scipy.io import wavfile
 
+import torch
+import torch.nn as nn
+import torchaudio
+from torch.utils.data import DataLoader, Dataset, random_split
+import pandas as pd
+import random
+
 # Source for spectrograph generation https://pythontic.com/visualization/signals/spectrogram
 
-def createSpectrogram(filename=''):
+def oldcreateSpectrogram(filename=''):
     if filename != '':
         samplingFrequency, signalData = wavfile.read(filename)
 
@@ -22,9 +29,10 @@ def createSpectrogram(filename=''):
         print(imgFilename)
         fig.savefig(imgFilename)
 
+def createSpectrogram():
+    return
+
 directory = 'wavFiles'
-# os.remove('imgFiles')
-# os.mkdir('imgFiles')
 for file in os.listdir(directory):
     f = os.path.join(directory, file)
     if os.path.isfile(f):
