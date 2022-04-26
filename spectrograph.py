@@ -36,17 +36,23 @@ def create_spectrogram(filename=''):
         img_filename = 'img_files/' + filename[18:len(filename)-3] + 'png'
         print(img_filename)
         fig.savefig(img_filename)
+        plt.close(fig)
 
 def spectrograph_loop():
     directory = 'prepped_wav_files'
+    i = 0
     for file in os.listdir(directory):
+        i += 1
         f = os.path.join(directory, file)
         if os.path.isfile(f):
+            print(str(i), end=', ')
             create_spectrogram(f)
 
 def trim_pad_audio():
     directory = 'wav_files'
+    i = 0
     for file in os.listdir(directory):
+        i += 1
         f = os.path.join(directory, file)
         if os.path.isfile(f):
             sig, samplerate = torchaudio.load(f)
@@ -61,7 +67,7 @@ def trim_pad_audio():
                 pad_end = torch.zeros((num_rows, pad_end_len))
                 sig = torch.cat((sig, pad_begin, pad_end), 1)
             filename = 'prepped_wav_files/' + file
-            print(filename)
+            print(str(i) + ', ' + filename)
             torchaudio.save(filename, sig, samplerate)
 
 spectrograph_loop()
