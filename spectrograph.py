@@ -15,26 +15,14 @@ import random
 # Source for spectrograph generation https://pythontic.com/visualization/signals/spectrogram
 # Also: https://pytorch.org/tutorials/beginner/audio_preprocessing_tutorial.html
 
-def oldcreateSpectrogram(filename=''):
-    if filename != '':
-        samplingFrequency, signalData = wavfile.read(filename)
-
-        fig = plt.figure()
-        plt.title(filename[39:])
-
-        plt.specgram(signalData, Fs=samplingFrequency)
-        plt.xlabel('Time')
-        plt.ylabel('Frequency')
-
-        # plt.show()
-        imgFilename = 'imgFiles/' + filename[9:len(filename)-3] + 'png'
-        print(imgFilename)
-        fig.savefig(imgFilename)
-
-def createSpectrogram(filename=''):
-    max_ms = 7
-    if filename != '':
-        sig, samplerate = torchaudio.load(filename)
+class audio_util():
+    #read wav file
+    def open(audio_file):
+        sig, samplerate = torchaudio.load(audio_file)
+        return (sig, samplerate)
+    #trim or pad audio to chosen max size
+    def pad_trunk(audio, max_ms):
+        sig, samplerate = audio
         num_rows, sig_len = sig.shape
         max_len = samplerate // 1000 * max_ms
 
@@ -50,40 +38,69 @@ def createSpectrogram(filename=''):
 
             sig = torch.cat((sig, pad_begin, pad_end), 1)
 
-        waveform = sig.numpy()
-        xlim = None
-        num_channels, num_frames = waveform.shape
-        time_axis = torch.arange(0, num_frames) / samplerate
+        return (sig, samplerate)
 
-        figure, axes = plt.subplots(num_channels, 1)
-        if num_channels == 1:
-            axes = [axes]
-        for c in range(num_channels):
-            axes[c].specgram(waveform[c], Fs = samplerate)
-            if num_channels > 1:
-                axes[c].set_ylabel(f'Channel {c+1}')
-            if xlim:
-                axes[c].set_xlim(xlim)
-        figure.suptitle('Spectrogram')
-        plt.show(block = False)
-        '''
+class input_prep(Dataset):
+    def __init__(self, df, data_path):
+        self.df = df
+        self.data_path = str(data_path)
+        self.duration = 700
+        self.sr = 16000
+        self.channel = 1
+
+    def __len__(self):
+        return len(self.df)
+
+    def __getitem__(self, idx):
+
+        audio_file = self.data_path + self.df.loc[idx, 'file'] + ".wav"
+        class_id = self.df.loc[idx, 'coding']
+
+        audio = audio_util.open(audio_file)
+        padded_audio = audio_util.pad_trunk(audio, self.duration)
+        return padded_audio
+
+def createSpectrogram(filename=''):
+    if filename != '':
+        samplingFrequency, signalData = wavfile.read(filename)
+
         fig = plt.figure()
         plt.title(filename[39:])
-        plt.specgram(sig, Fs=samplerate)
+
+        plt.specgram(signalData, Fs=samplingFrequency)
         plt.xlabel('Time')
         plt.ylabel('Frequency')
-        img_filename = 'imgFiles/' + filename[9:len(filename)-3] + 'png'
-        print(img_filename)
-        fig.savefig(img_filename)
-        '''
 
-        
+        # plt.show()
+        imgFilename = 'imgFiles/' + filename[9:len(filename)-3] + 'png'
+        print(imgFilename)
+        fig.savefig(imgFilename)
 
-directory = 'wavFiles'
-for file in os.listdir(directory):
-    f = os.path.join(directory, file)
-    if os.path.isfile(f):
-        createSpectrogram(f)
+def new(filename = ''):
+    if filename != '':
+        samplingFrequency, signalData = wavfile.read(filename)
+
+        fig, ax = plt.subplots()
+        ax.set_title(filename[48:])
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Frequency')
+        ax.set_xlim(0, 0.7)
+        ax.set_ylim(0, 8000)
+        plt.specgram(signalData, Fs=samplingFrequency)
+        imgFilename = 'imgFiles/' + filename[9:len(filename)-3] + 'png'
+        print(imgFilename)
+        fig.savefig(imgFilename)
+
+def spectrograph_loop():
+    directory = 'wavFiles'
+    for file in os.listdir(directory):
+        f = os.path.join(directory, file)
+        if os.path.isfile(f):
+            #createSpectrogram(f)
+            new(f)
+
+# spectrograph_loop()
+new('wavFiles/021A-C0897X0004XX-AAZZP0_000407_KDP_2__WHAT-YOU__1675-3025.wav')
 
 # Model building guides from Austin:
 
