@@ -76,6 +76,7 @@ torch.cuda.empty_cache()
 
 ## create feed forward network
 class PalatalizationClassifier(nn.Module):
+    '''
     def __init__(self, input_size, hidden_size_0, num_classes):
         super(PalatalizationClassifier, self).__init__()
         self.input_size = input_size
@@ -91,6 +92,15 @@ class PalatalizationClassifier(nn.Module):
         out = self.l2(out)
         out = self.relu(out)
         out = self.l3(out)
+        return out
+    '''
+    def __init__(self, input_size, hidden_size_0, num_classes):
+        super(PalatalizationClassifier, self).__init__()
+        self.input_size = input_size
+        self.seq1 = nn.Sequential(nn.Linear(input_size, hidden_size_0), nn.ReLU(), nn.Dropout(), nn.Linear(hidden_size_0, hidden_size_1), nn.LogSoftmax(dim=1))
+    
+    def forward(self, x):
+        out = self.seq1(x)
         return out
 
 ##training loop
