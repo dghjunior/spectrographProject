@@ -113,7 +113,7 @@ print(model)
 for param in model.parameters():
     param.required_grad = False
 model.fc = nn.Sequential(nn.Linear(2048, 512), nn.ReLU(), nn.Dropout(), nn.Linear(512, 10), nn.LogSoftmax(dim=1))
-criterion = nn.CrossEntropyLoss()
+criterion = nn.NLLLoss()
 optimizer = optim.Adam(model.fc.parameters(), lr=0.003)
 model.to(device)
 
