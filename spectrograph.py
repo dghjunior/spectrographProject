@@ -78,10 +78,10 @@ def trim_pad_audio():
             print(str(i) + ', ' + filename)
             torchaudio.save(filename, sig, samplerate)
 
-spectrograph_loop()
+#spectrograph_loop()
 #create_spectrogram('prepped_wav_files/021A-C0897X0004XX-AAZZP0_000407_KDP_2__WHAT-YOU__1675-3025.wav')
 #trim_pad_audio()
-'''
+
 if not os.path.exists('img_files'):
     os.makedirs('img_files')
 data_dir = 'img_files'
@@ -163,4 +163,3 @@ plt.plot(train_losses, label='Training loss')
 plt.plot(test_losses, label='Validation loss')
 plt.legend(frameon=False)
 plt.show()
-'''
