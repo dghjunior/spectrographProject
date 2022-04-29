@@ -10,7 +10,9 @@ import torchaudio
 from torch.utils.data import DataLoader, Dataset, random_split
 import pandas as pd
 import numpy as np
-from skimage.io import imread, imshow
+from skimage import io
+#from skimage.io import imread, imshow
+import matplotlib as plt
 import random
 
 ## set directory for metadata and build wav data cleaning methods
@@ -23,8 +25,9 @@ class img_util():
         sig, samplerate = torchaudio.load(audio_file)
         return (sig, samplerate)
     def feature_extraction(img_file):
-        img = imread(img_file, as_gray=True)
-        features = np.reshape(img, (600,512))
+        img = io.imread(img_file, as_gray=True)
+        features = torch.flatten(torch.from_numpy(img))
+        print(features.shape)
         return features
 
 ## create class for model input preparation
@@ -46,8 +49,7 @@ class input_prep(Dataset):
 
         # img = img_util.open(img_file)
         img_features = img_util.feature_extraction(img_file)
-        img_features_flat = torch.flatten(torch.from_numpy(img_features))
-        print(img_features_flat.shape)
+        print(img_features.shape)
 
         return img_features, class_id
 
@@ -66,7 +68,7 @@ train_ds, test_ds = random_split(dataset, [num_train, num_test])
 train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
 test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
 #hpyerparamaters
-input_size = 9600
+input_size = 600
 hidden_size_0 = 512
 hidden_size_1 = 100
 num_classes = 2
@@ -82,8 +84,6 @@ class PalatalizationClassifier(nn.Module):
         self.l2 = nn.Linear(hidden_size_0, hidden_size_1)
         self.relu = nn.ReLU()
         self.l3 = nn.Linear(hidden_size_1, num_classes)
-        self.relu = nn.ReLU()
-        self.l4 = nn.LogSoftmax(dim=1)
 
     def forward(self, x):
         out = self.l1(x)
