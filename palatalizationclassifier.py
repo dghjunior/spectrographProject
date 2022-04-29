@@ -12,9 +12,9 @@ import pandas as pd
 import random
 
 ## set directory for metadata and build wav data cleaning methods
-metadata = "/Users/LING/PycharmProjects/audioclassifier/ASR_project/t_data_asr.txt"
+metadata = "t_data_asr.txt"
 df = pd.read_table(metadata)
-data_path = "/Users/LING/PycharmProjects/audioclassifier/ASR_project/t-wavs/"
+data_path = "wav_files/"
 
 class audio_util():
     #read wav file
@@ -86,7 +86,7 @@ train_ds, test_ds = random_split(dataset, [num_train, num_test])
 train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
 test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
 #hpyerparamaters
-input_size =741
+input_size = 741
 hidden_size_0 = 250
 hidden_size_1 = 100
 num_classes = 2

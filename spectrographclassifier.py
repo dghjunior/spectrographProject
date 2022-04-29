@@ -19,13 +19,12 @@ df = pd.read_table(metadata)
 data_path = "img_files/"
 
 class img_util():
-    #read wav file
     def open(audio_file):
         sig, samplerate = torchaudio.load(audio_file)
         return (sig, samplerate)
     def feature_extraction(img_file):
         img = imread(img_file, as_gray=True)
-        features = np.reshape(img, (660*450))
+        features = np.reshape(img, (600,512))
         return features
 
 ## create class for model input preparation
@@ -47,9 +46,10 @@ class input_prep(Dataset):
 
         # img = img_util.open(img_file)
         img_features = img_util.feature_extraction(img_file)
-        img_features_flat = torch.flatten(img_features)
+        img_features_flat = torch.flatten(torch.from_numpy(img_features))
+        print(img_features_flat.shape)
 
-        return img_features_flat, class_id
+        return img_features, class_id
 
 ## splitting dataset into training and validation set
 
@@ -66,8 +66,8 @@ train_ds, test_ds = random_split(dataset, [num_train, num_test])
 train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
 test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
 #hpyerparamaters
-input_size =741
-hidden_size_0 = 250
+input_size = 9600
+hidden_size_0 = 512
 hidden_size_1 = 100
 num_classes = 2
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -82,6 +82,8 @@ class PalatalizationClassifier(nn.Module):
         self.l2 = nn.Linear(hidden_size_0, hidden_size_1)
         self.relu = nn.ReLU()
         self.l3 = nn.Linear(hidden_size_1, num_classes)
+        self.relu = nn.ReLU()
+        self.l4 = nn.LogSoftmax(dim=1)
 
     def forward(self, x):
         out = self.l1(x)

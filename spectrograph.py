@@ -36,12 +36,13 @@ def create_spectrogram(filename=''):
         plt.xlabel('Time')
         plt.ylabel('Frequency')
 
-        index = filename.find('__')
-        index2 = filename.rfind('__')
-        classifier = 'img_files/' + filename[index:index2]
-        if not os.path.exists(classifier):
-            os.makedirs(classifier)
-        img_filename = classifier + '/' + filename[index:len(filename)-3] + 'png'
+        #index = filename.find('__')
+        #index2 = filename.rfind('__')
+        #classifier = 'img_files/' + filename[index:index2]
+        #if not os.path.exists(classifier):
+            #os.makedirs(classifier)
+        #img_filename = classifier + '/' + filename[index:len(filename)-3] + 'png'
+        img_filename = 'img_files/' + filename[18:len(filename)-3] + 'png'
         print(img_filename)
         fig.savefig(img_filename)
         plt.close(fig)
@@ -78,7 +79,7 @@ def trim_pad_audio():
             print(str(i) + ', ' + filename)
             torchaudio.save(filename, sig, samplerate)
 
-#spectrograph_loop()
+spectrograph_loop()
 #create_spectrogram('prepped_wav_files/021A-C0897X0004XX-AAZZP0_000407_KDP_2__WHAT-YOU__1675-3025.wav')
 #trim_pad_audio()
 
@@ -86,6 +87,7 @@ if not os.path.exists('img_files'):
     os.makedirs('img_files')
 data_dir = 'img_files'
 
+'''
 def load_split_train_test(datadir, valid_size = .2):
     train_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor(),])
     test_transforms = transforms.Compose([transforms.Resize(224), transforms.ToTensor(),])
@@ -163,3 +165,4 @@ plt.plot(train_losses, label='Training loss')
 plt.plot(test_losses, label='Validation loss')
 plt.legend(frameon=False)
 plt.show()
+'''
