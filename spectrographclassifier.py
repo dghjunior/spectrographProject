@@ -14,6 +14,7 @@ from skimage import io
 #from skimage.io import imread, imshow
 import matplotlib as plt
 import random
+import gc
 
 ## set directory for metadata and build wav data cleaning methods
 metadata = "t_data_asr.txt"
@@ -62,14 +63,15 @@ num_test = num_items - num_train
 train_ds, test_ds = random_split(dataset, [num_train, num_test])
 
 # Create training and validation data loaders
-train_dl = torch.utils.data.DataLoader(train_ds, batch_size=1, shuffle=True)
-test_dl = torch.utils.data.DataLoader(test_ds, batch_size=1, shuffle=False)
+train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
+test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
 #hpyerparamaters
 input_size = 307200
 hidden_size_0 = 1000
 hidden_size_1 = 100
 num_classes = 2
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+gc.collect()
 torch.cuda.empty_cache()
 
 ## create feed forward network
