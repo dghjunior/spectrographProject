@@ -26,8 +26,7 @@ class img_util():
         return (sig, samplerate)
     def feature_extraction(img_file):
         img = io.imread(img_file, as_gray=True)
-        features = torch.flatten(torch.from_numpy(img))
-        print(features.shape)
+        features = torch.flatten(torch.from_numpy(np.array(img, dtype='float32')))
         return features
 
 ## create class for model input preparation
@@ -49,8 +48,6 @@ class input_prep(Dataset):
 
         # img = img_util.open(img_file)
         img_features = img_util.feature_extraction(img_file)
-        print(img_features.shape)
-
         return img_features, class_id
 
 ## splitting dataset into training and validation set
@@ -65,14 +62,15 @@ num_test = num_items - num_train
 train_ds, test_ds = random_split(dataset, [num_train, num_test])
 
 # Create training and validation data loaders
-train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
-test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
+train_dl = torch.utils.data.DataLoader(train_ds, batch_size=1, shuffle=True)
+test_dl = torch.utils.data.DataLoader(test_ds, batch_size=1, shuffle=False)
 #hpyerparamaters
-input_size = 600
-hidden_size_0 = 512
+input_size = 307200
+hidden_size_0 = 1000
 hidden_size_1 = 100
 num_classes = 2
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.cuda.empty_cache()
 
 ## create feed forward network
 class PalatalizationClassifier(nn.Module):
@@ -108,6 +106,7 @@ def training(model, train_dl, num_epochs):
         total_prediction = 0.0
 
         for i, data in enumerate(train_dl):
+            print(i, end=', ')
             inputs, labels = data[0].to(device), data[1].to(device)
 
             inputs_m, inputs_s = inputs.mean(), inputs.std()
