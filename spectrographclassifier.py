@@ -1,19 +1,14 @@
-# This script includes the full pipline for a palatalization audio classifier.
-# The code is adapted from https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5
-# Substantial changes made to adapt model from image classification to audio classification
-# Pipline is data cleanup -> feature extraction -> model building -> training -> testing
+#https://discuss.pytorch.org/t/how-to-plot-train-and-validation-accuracy-graph/105524
 
 ## import packages
 import torch
 import torch.nn as nn
 import torchaudio
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import Dataset, random_split
 import pandas as pd
 import numpy as np
 from skimage import io
-#from skimage.io import imread, imshow
 import matplotlib as plt
-import random
 import gc
 
 ## set directory for metadata and build wav data cleaning methods
@@ -43,11 +38,8 @@ class input_prep(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
-
         img_file = self.data_path + self.df.loc[idx, 'file'] + ".png"
         class_id = self.df.loc[idx, 'coding']
-
-        # img = img_util.open(img_file)
         img_features = img_util.feature_extraction(img_file)
         return img_features, class_id
 
@@ -102,14 +94,14 @@ def training(model, train_dl, num_epochs):
                                                     epochs=num_epochs,
                                                     anneal_strategy='linear')
 
+    train_losses = []
+    train_acc = []
     for epoch in range(num_epochs):
         running_loss = 0.0
         correct_prediction = 0.0
         total_prediction = 0.0
 
         for i, data in enumerate(train_dl):
-            print(i, end=', ')
-
             inputs, labels = data[0].to(device), data[1].to(device)
 
             inputs_m, inputs_s = inputs.mean(), inputs.std()
@@ -133,9 +125,19 @@ def training(model, train_dl, num_epochs):
         num_baches = len(train_dl)
         avg_loss = running_loss/num_baches
         acc = correct_prediction/total_prediction
+        train_losses.append(avg_loss)
+        train_acc.append(acc)
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}')
 
     print('finished')
+    plt.figure(figsize=(10,5))
+    plt.title('Training Loss and Accuracy')
+    plt.plot(train_losses, label='loss')
+    plt.plot(train_acc, label='accuracy')
+    plt.xlabel('epochs')
+    plt.ylabel('Loss and Accuracy')
+    plt.legend()
+    plt.show()
 
 ## Inference fucntion
 def inference(model, test_dl):
@@ -163,17 +165,8 @@ def inference(model, test_dl):
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=50
+num_epochs=5
 training(PalatalizationClassifier, train_dl, num_epochs)
 
 ## Testing
 inference(PalatalizationClassifier, test_dl)
-
-
-
-
-
-
-
-
-
