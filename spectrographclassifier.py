@@ -63,11 +63,11 @@ num_test = num_items - num_train
 train_ds, test_ds = random_split(dataset, [num_train, num_test])
 
 # Create training and validation data loaders
-train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
-test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
+train_dl = torch.utils.data.DataLoader(train_ds, batch_size=8, shuffle=True)
+test_dl = torch.utils.data.DataLoader(test_ds, batch_size=8, shuffle=False)
 #hpyerparamaters
 input_size = 307200
-hidden_size_0 = 1000
+hidden_size_0 = 512
 hidden_size_1 = 100
 num_classes = 2
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -76,7 +76,6 @@ torch.cuda.empty_cache()
 
 ## create feed forward network
 class PalatalizationClassifier(nn.Module):
-    '''
     def __init__(self, input_size, hidden_size_0, num_classes):
         super(PalatalizationClassifier, self).__init__()
         self.input_size = input_size
@@ -92,15 +91,6 @@ class PalatalizationClassifier(nn.Module):
         out = self.l2(out)
         out = self.relu(out)
         out = self.l3(out)
-        return out
-    '''
-    def __init__(self, input_size, hidden_size_0, num_classes):
-        super(PalatalizationClassifier, self).__init__()
-        self.input_size = input_size
-        self.seq1 = nn.Sequential(nn.Linear(input_size, hidden_size_0), nn.ReLU(), nn.Dropout(), nn.Linear(hidden_size_0, hidden_size_1), nn.LogSoftmax(dim=1))
-    
-    def forward(self, x):
-        out = self.seq1(x)
         return out
 
 ##training loop
@@ -119,6 +109,7 @@ def training(model, train_dl, num_epochs):
 
         for i, data in enumerate(train_dl):
             print(i, end=', ')
+
             inputs, labels = data[0].to(device), data[1].to(device)
 
             inputs_m, inputs_s = inputs.mean(), inputs.std()
