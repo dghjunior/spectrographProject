@@ -1,0 +1,54 @@
+2022-04-30 03:03:15.651654
+Epoch: 0, Loss: 0.52, Accuracy: 0.81
+Epoch: 1, Loss: 0.46, Accuracy: 0.84
+Epoch: 2, Loss: 0.42, Accuracy: 0.84
+Epoch: 3, Loss: 0.41, Accuracy: 0.85
+Epoch: 4, Loss: 0.40, Accuracy: 0.84
+Epoch: 5, Loss: 0.42, Accuracy: 0.83
+Epoch: 6, Loss: 0.41, Accuracy: 0.84
+Epoch: 7, Loss: 0.40, Accuracy: 0.85
+Epoch: 8, Loss: 0.41, Accuracy: 0.84
+Epoch: 9, Loss: 0.42, Accuracy: 0.84
+Epoch: 10, Loss: 0.41, Accuracy: 0.85
+Epoch: 11, Loss: 0.40, Accuracy: 0.84
+Epoch: 12, Loss: 0.40, Accuracy: 0.85
+Epoch: 13, Loss: 0.40, Accuracy: 0.84
+Epoch: 14, Loss: 0.39, Accuracy: 0.85
+Epoch: 15, Loss: 0.38, Accuracy: 0.85
+Epoch: 16, Loss: 0.37, Accuracy: 0.86
+Epoch: 17, Loss: 0.37, Accuracy: 0.85
+Epoch: 18, Loss: 0.36, Accuracy: 0.85
+Epoch: 19, Loss: 0.36, Accuracy: 0.86
+Epoch: 20, Loss: 0.36, Accuracy: 0.86
+Epoch: 21, Loss: 0.36, Accuracy: 0.86
+Epoch: 22, Loss: 0.34, Accuracy: 0.86
+Epoch: 23, Loss: 0.34, Accuracy: 0.86
+Epoch: 24, Loss: 0.34, Accuracy: 0.86
+Epoch: 25, Loss: 0.33, Accuracy: 0.87
+Epoch: 26, Loss: 0.32, Accuracy: 0.88
+Epoch: 27, Loss: 0.33, Accuracy: 0.87
+Epoch: 28, Loss: 0.33, Accuracy: 0.87
+Epoch: 29, Loss: 0.32, Accuracy: 0.87
+Epoch: 30, Loss: 0.31, Accuracy: 0.88
+Epoch: 31, Loss: 0.30, Accuracy: 0.88
+Epoch: 32, Loss: 0.30, Accuracy: 0.88
+Epoch: 33, Loss: 0.30, Accuracy: 0.88
+Epoch: 34, Loss: 0.30, Accuracy: 0.89
+Epoch: 35, Loss: 0.29, Accuracy: 0.89
+Epoch: 36, Loss: 0.28, Accuracy: 0.89
+Epoch: 37, Loss: 0.28, Accuracy: 0.89
+Epoch: 38, Loss: 0.28, Accuracy: 0.89
+Epoch: 39, Loss: 0.26, Accuracy: 0.90
+Epoch: 40, Loss: 0.27, Accuracy: 0.90
+Epoch: 41, Loss: 0.26, Accuracy: 0.91
+Epoch: 42, Loss: 0.25, Accuracy: 0.90
+Epoch: 43, Loss: 0.25, Accuracy: 0.91
+Epoch: 44, Loss: 0.25, Accuracy: 0.91
+Epoch: 45, Loss: 0.24, Accuracy: 0.91
+Epoch: 46, Loss: 0.23, Accuracy: 0.92
+Epoch: 47, Loss: 0.23, Accuracy: 0.92
+Epoch: 48, Loss: 0.23, Accuracy: 0.92
+Epoch: 49, Loss: 0.22, Accuracy: 0.92
+finished
+Accuracy: 0.86, Total items: 1296
+2022-04-30 05:01:17.368060
