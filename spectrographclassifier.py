@@ -10,6 +10,7 @@ import numpy as np
 from skimage import io
 import matplotlib.pyplot as plt
 import gc
+import datetime
 
 ## set directory for metadata and build wav data cleaning methods
 metadata = "t_data_asr.txt"
@@ -58,7 +59,7 @@ train_ds, test_ds = random_split(dataset, [num_train, num_test])
 train_dl = torch.utils.data.DataLoader(train_ds, batch_size=32, shuffle=True)
 test_dl = torch.utils.data.DataLoader(test_ds, batch_size=32, shuffle=False)
 #hpyerparamaters
-input_size = 307200
+input_size = 200335
 hidden_size_0 = 512
 hidden_size_1 = 100
 num_classes = 2
@@ -161,12 +162,16 @@ def inference(model, test_dl):
     acc = correct_prediction/total_prediction
     print(f'Accuracy: {acc:.2f}, Total items: {total_prediction}')
 
+print(datetime.datetime.now())
+
 ## Instantiate model on GPU
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=5
+num_epochs=50
 training(PalatalizationClassifier, train_dl, num_epochs)
 
 ## Testing
 inference(PalatalizationClassifier, test_dl)
+
+print(datetime.datetime.now())
