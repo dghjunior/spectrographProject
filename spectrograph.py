@@ -26,10 +26,10 @@ def create_spectrogram(filename='', sorted = False):
         if sorted:
             index = filename.find('__')
             index2 = filename.rfind('__')
-            classifier = 'img_files/' + filename[index:index2]
+            classifier = 'sorted_img_files/' + filename[index+2:index2]
             if not os.path.exists(classifier):
                 os.makedirs(classifier)
-            img_filename = classifier + '/' + filename[index:len(filename)-3] + 'png'
+            img_filename = classifier + '/' + filename[index+2:len(filename)-3] + 'png'
         else:
             img_filename = 'img_files/' + filename[18:len(filename)-3] + 'png'
         print(img_filename)
@@ -70,4 +70,4 @@ def trim_pad_audio():
             print(str(i) + ', ' + filename)
             torchaudio.save(filename, sig, samplerate)
 
-spectrograph_loop(False)
+spectrograph_loop(True)
