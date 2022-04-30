@@ -55,8 +55,8 @@ num_test = num_items - num_train
 train_ds, test_ds = random_split(dataset, [num_train, num_test])
 
 # Create training and validation data loaders
-train_dl = torch.utils.data.DataLoader(train_ds, batch_size=8, shuffle=True)
-test_dl = torch.utils.data.DataLoader(test_ds, batch_size=8, shuffle=False)
+train_dl = torch.utils.data.DataLoader(train_ds, batch_size=32, shuffle=True)
+test_dl = torch.utils.data.DataLoader(test_ds, batch_size=32, shuffle=False)
 #hpyerparamaters
 input_size = 307200
 hidden_size_0 = 512

@@ -17,11 +17,12 @@ import random
 def create_spectrogram(filename='', sorted = False):
     if filename != '':
         sampling_frequency, signal_data = wavfile.read(filename)
-        fig = plt.figure()
-        plt.title(filename[39:])
+        plt.figure()
+        #plt.title(filename[39:])
         plt.specgram(signal_data, Fs=sampling_frequency)
-        plt.xlabel('Time')
-        plt.ylabel('Frequency')
+        #plt.xlabel('Time')
+        #plt.ylabel('Frequency')
+        plt.axis('off')
         if sorted:
             index = filename.find('__')
             index2 = filename.rfind('__')
@@ -32,8 +33,8 @@ def create_spectrogram(filename='', sorted = False):
         else:
             img_filename = 'img_files/' + filename[18:len(filename)-3] + 'png'
         print(img_filename)
-        fig.savefig(img_filename)
-        plt.close(fig)
+        plt.savefig(img_filename, bbox_inches='tight')
+        plt.close()
 
 def spectrograph_loop(sorted = False):
     if not os.path.exists('img_files'):
