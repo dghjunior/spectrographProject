@@ -8,7 +8,7 @@ from torch.utils.data import Dataset, random_split
 import pandas as pd
 import numpy as np
 from skimage import io
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import gc
 
 ## set directory for metadata and build wav data cleaning methods
