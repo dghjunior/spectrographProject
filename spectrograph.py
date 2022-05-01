@@ -70,4 +70,4 @@ def trim_pad_audio():
             print(str(i) + ', ' + filename)
             torchaudio.save(filename, sig, samplerate)
 
-spectrograph_loop(True)
+spectrograph_loop(False)
