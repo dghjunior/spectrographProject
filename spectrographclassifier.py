@@ -1,3 +1,4 @@
+#Reference for loss and accuracy plot
 #https://discuss.pytorch.org/t/how-to-plot-train-and-validation-accuracy-graph/105524
 
 ## import packages

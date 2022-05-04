@@ -8,12 +8,6 @@ import random
 # Source for spectrograph generation https://pythontic.com/visualization/signals/spectrogram
 # Also: https://pytorch.org/tutorials/beginner/audio_preprocessing_tutorial.html
 
-# Model building guides from Austin:
-
-# https://analyticsindiamag.com/guide-to-feed-forward-network-using-pytorch-with-mnist-dataset/
-# https://www.deeplearningwizard.com/deep_learning/practical_pytorch/pytorch_feedforward_neuralnetwork/
-# https://towardsdatascience.com/audio-deep-learning-made-simple-sound-classification-step-by-step-cebc936bbe5
-
 def create_spectrogram(filename='', sorted = False):
     if filename != '':
         sampling_frequency, signal_data = wavfile.read(filename)
