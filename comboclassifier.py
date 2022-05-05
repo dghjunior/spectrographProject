@@ -184,14 +184,14 @@ def training(model, train_dl, num_epochs):
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}')
 
     print('finished')
-    plt.figure(figsize=(10,5))
-    plt.title('Training Loss and Accuracy')
-    plt.plot(train_losses, label='loss')
-    plt.plot(train_acc, label='accuracy')
-    plt.xlabel('epochs')
-    plt.ylabel('Loss and Accuracy')
-    plt.legend()
-    plt.show()
+    #plt.figure(figsize=(10,5))
+    #plt.title('Training Loss and Accuracy')
+    #plt.plot(train_losses, label='loss')
+    #plt.plot(train_acc, label='accuracy')
+    #plt.xlabel('epochs')
+    #plt.ylabel('Loss and Accuracy')
+    #plt.legend()
+    #plt.show()
 
 ## Inference fucntion
 def inference(model, test_dl):
@@ -219,7 +219,7 @@ def inference(model, test_dl):
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=50
+num_epochs=25
 training(PalatalizationClassifier, train_dl, num_epochs)
 
 ## Testing
