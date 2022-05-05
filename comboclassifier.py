@@ -22,7 +22,7 @@ import datetime
 metadata = "t_data_asr.txt"
 df = pd.read_table(metadata)
 # audio files dp
-audio_data_path = "wav-files/"
+audio_data_path = "wav_files/"
 # img files dp
 img_data_path = "img_files/"
 
@@ -219,7 +219,7 @@ def inference(model, test_dl):
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=3
+num_epochs=50
 training(PalatalizationClassifier, train_dl, num_epochs)
 
 ## Testing
