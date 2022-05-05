@@ -4,12 +4,14 @@
 # Pipline is data cleanup -> feature extraction -> model building -> training -> testing
 
 ## import packages
+# audio packages
 import torch
 import torch.nn as nn
 import torchaudio
 from torch.utils.data import DataLoader, Dataset, random_split
 import pandas as pd
 import random
+# img packages
 import numpy as np
 from skimage import io
 import matplotlib.pyplot as plt
@@ -19,7 +21,9 @@ import datetime
 ## set directory for metadata and build wav data cleaning methods
 metadata = "t_data_asr.txt"
 df = pd.read_table(metadata)
-audio_data_path = "wav_files/"
+# audio files dp
+audio_data_path = "wav-files/"
+# img files dp
 img_data_path = "img_files/"
 
 class audio_util():
@@ -54,9 +58,6 @@ class audio_util():
         return mfcc_feature
 
 class img_util():
-    def open(audio_file):
-        sig, samplerate = torchaudio.load(audio_file)
-        return (sig, samplerate)
     def feature_extraction(img_file):
         img = io.imread(img_file, as_gray=True)
         features = torch.flatten(torch.from_numpy(np.array(img, dtype='float32')))
@@ -76,23 +77,31 @@ class input_prep(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
-
+        #opening paths to audio and image files
         audio_file = self.audio_data_path + self.df.loc[idx, 'file'] + ".wav"
-        img_file = self.data_path + self.df.loc[idx, 'file'] + ".png"
+        img_file = self.img_data_path + self.df.loc[idx, 'file'] + ".png"
         class_id = self.df.loc[idx, 'coding']
 
+        #extracting features into tensors
         audio = audio_util.open(audio_file)
         padded_audio = audio_util.pad_trunk(audio, self.duration)
         mfcc_features = audio_util.mfcc_extraction(padded_audio)
         img_features = img_util.feature_extraction(img_file)
-        mfcc_features_flat = torch.flatten(mfcc_features)
 
-        return mfcc_features_flat, class_id
+        #reshaping image tensors to 1xN dimensions for input into concatenator
+        mfcc_features_reshape = torch.reshape(mfcc_features, (1, 741))
+        img_features_reshape = torch.reshape(img_features, (1, 200335))
+
+        # Combining the two tensors
+        concat_features = torch.cat((img_features_reshape, mfcc_features_reshape), 1)
+        # Flattening for input into NN
+        concat_features_flat = torch.flatten(concat_features)
+        return concat_features_flat, class_id
 
 ## splitting dataset into training and validation set
 
 #load files into dataset
-dataset = input_prep(df, audio_data_path)
+dataset = input_prep(df, audio_data_path, img_data_path)
 
 #split dataset
 num_items = len(dataset)
@@ -104,8 +113,9 @@ train_ds, test_ds = random_split(dataset, [num_train, num_test])
 train_dl = torch.utils.data.DataLoader(train_ds, batch_size=16, shuffle=True)
 test_dl = torch.utils.data.DataLoader(test_ds, batch_size=16, shuffle=False)
 #hpyerparamaters
-input_size = 741
-hidden_size_0 = 250
+# change with error message
+input_size = 201076
+hidden_size_0 = 512
 hidden_size_1 = 100
 num_classes = 2
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -138,6 +148,8 @@ def training(model, train_dl, num_epochs):
                                                     epochs=num_epochs,
                                                     anneal_strategy='linear')
 
+    train_losses = []
+    train_acc = []
     for epoch in range(num_epochs):
         running_loss = 0.0
         correct_prediction = 0.0
@@ -167,9 +179,19 @@ def training(model, train_dl, num_epochs):
         num_baches = len(train_dl)
         avg_loss = running_loss/num_baches
         acc = correct_prediction/total_prediction
+        train_losses.append(avg_loss)
+        train_acc.append(acc)
         print(f'Epoch: {epoch}, Loss: {avg_loss:.2f}, Accuracy: {acc:.2f}')
 
     print('finished')
+    plt.figure(figsize=(10,5))
+    plt.title('Training Loss and Accuracy')
+    plt.plot(train_losses, label='loss')
+    plt.plot(train_acc, label='accuracy')
+    plt.xlabel('epochs')
+    plt.ylabel('Loss and Accuracy')
+    plt.legend()
+    plt.show()
 
 ## Inference fucntion
 def inference(model, test_dl):
@@ -197,7 +219,7 @@ def inference(model, test_dl):
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=50
+num_epochs=3
 training(PalatalizationClassifier, train_dl, num_epochs)
 
 ## Testing
