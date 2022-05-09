@@ -219,7 +219,7 @@ def inference(model, test_dl):
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=50
+num_epochs=100
 training(PalatalizationClassifier, train_dl, num_epochs)
 
 ## Testing
