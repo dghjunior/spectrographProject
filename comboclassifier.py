@@ -219,8 +219,10 @@ def inference(model, test_dl):
 PalatalizationClassifier = PalatalizationClassifier(input_size, hidden_size_0, num_classes)
 PalatalizationClassifier = PalatalizationClassifier.to(device)
 ## Training
-num_epochs=100
+num_epochs=50
 training(PalatalizationClassifier, train_dl, num_epochs)
+
+torch.save(PalatalizationClassifier.state_dict(), "model.pt")
 
 ## Testing
 inference(PalatalizationClassifier, test_dl)
