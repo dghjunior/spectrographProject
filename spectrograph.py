@@ -12,10 +12,10 @@ def create_spectrogram(filename='', sorted = False):
     if filename != '':
         sampling_frequency, signal_data = wavfile.read(filename)
         plt.figure()
-        #plt.title(filename[39:])
+        plt.title(filename)
         plt.specgram(signal_data, Fs=sampling_frequency)
-        #plt.xlabel('Time')
-        #plt.ylabel('Frequency')
+        plt.xlabel('Time')
+        plt.ylabel('Frequency')
         plt.axis('off')
         if sorted:
             index = filename.find('__')
@@ -25,15 +25,16 @@ def create_spectrogram(filename='', sorted = False):
                 os.makedirs(classifier)
             img_filename = classifier + '/' + filename[index+2:len(filename)-3] + 'png'
         else:
-            img_filename = 'img_files/' + filename[18:len(filename)-3] + 'png'
+            img_filename = 'NEW/' + filename[17:len(filename)-3] + 'png'
         print(img_filename)
-        plt.savefig(img_filename, bbox_inches='tight')
+        #plt.savefig(img_filename, bbox_inches='tight')
+        plt.savefig(img_filename)
         plt.close()
 
 def spectrograph_loop(sorted = False):
-    if not os.path.exists('img_files'):
-        os.makedirs('img_files')
-    directory = 'prepped_wav_files'
+    if not os.path.exists('NEW'):
+        os.makedirs('NEW')
+    directory = 'prepped_mini_set'
     i = 0
     for file in os.listdir(directory):
         i += 1
